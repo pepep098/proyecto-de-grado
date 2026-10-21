@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moti y Moti en Aventura – Proyecto de Grado ENSP</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0a0a0a;
+      font-family: 'Lato', sans-serif;
+    }
+
+    /* ====== SLIDESHOW ====== */
+    #slideshow {
+      width: 100vw;
+      /* Leave space for nav bar */
+      height: calc(100vh - 50px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ====================================================
+       SLIDE 1 – PORTADA
+       La imagen portada.png cubre todo el slide.
+       El texto (título + integrantes) va al lado DERECHO
+       encima de la foto del colegio (aprox 60% derecha).
+    ====================================================== */
+    #s1 {
+      background: url('portada.png') center center / cover no-repeat;
+    }
+
+    #s1 .portada-content {
+      /* El logo ocupa ~38% izquierda, el texto va en el 62% derecha */
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 62%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 50px;
+      text-align: center;
+    }
+
+    #s1 .label-tag {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #000000;
+      margin-bottom: 16px;
+      font-family: 'Lato', sans-serif;
+    }
+
+    #s1 .slide-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(22px, 3.5vw, 46px);
+      color: #000000;
+      line-height: 1.2;
+      margin-bottom: 8px;
+      text-shadow: none;
+    }
+
+    #s1 .slide-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(11px, 1.4vw, 16px);
+      color: #000000;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+      text-shadow: none;
+    }
+
+    #s1 .divider {
+      width: 70px;
+      height: 2px;
+      background: linear-gradient(to right, transparent, #b8a86a, transparent);
+      margin: 0 auto 22px;
+    }
+
+    #s1 .integrantes {
+      font-family: 'Lato', sans-serif;
+      font-size: clamp(11px, 1.3vw, 14px);
+      color: #000000;
+      line-height: 2;
+      text-shadow: none;
+    }
+
+    #s1 .integrantes strong {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #000000;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    #s1 .fecha {
+      margin-top: 20px;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #000000;
+      font-family: 'Lato', sans-serif;
+    }
+
+    /* ====================================================
+       SLIDES 2–10 – CONTENIDO
+       La imagen "imagen de contenido.png" cubre TODO el slide.
+       Panel izquierdo negro (~17%) ya viene en la imagen.
+       El texto va en la zona azul (parte derecha, ~83%).
+    ====================================================== */
+    .slide-content {
+      position: absolute;
+      inset: 0;
+      background: url('imagen de contenido.png') center center / cover no-repeat;
+    }
+
+    /* Área de texto: desde el 18% hasta el 100% (zona azul de la imagen) */
+    .content-area {
+      position: absolute;
+      top: 0;
+      left: 17%;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+    }
+
+    /* Layout con foto: texto a la izquierda, foto a la derecha */
+    .text-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 28px 20px 28px 40px;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .photo-panel {
+      width: 38%;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 18px 18px 18px 0;
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    .photo-panel img {
+      width: 100%;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(184, 168, 106, 0.3);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+    }
+
+    .photo-panel img.tall {
+      flex: 1;
+      max-height: 55%;
+    }
+
+    .photo-panel img.short {
+      flex: 1;
+      max-height: 42%;
+    }
+
+    /* Slide sin foto: texto ocupa todo el ancho */
+    .content-area.no-photo .text-panel {
+      padding-right: 50px;
+    }
+
+    /* ---- Tipografía contenido ---- */
+    .c-tag {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 10px;
+      font-family: 'Lato', sans-serif;
+    }
+
+    .c-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(22px, 3vw, 40px);
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 12px rgba(0, 0, 20, 0.5);
+    }
+
+    .c-divider {
+      width: 55px;
+      height: 2px;
+      background: linear-gradient(to right, #b8a86a, transparent);
+      margin-bottom: 18px;
+    }
+
+    .c-body {
+      font-size: clamp(13px, 1.4vw, 16px);
+      color: rgba(255, 255, 255, 0.92);
+      line-height: 1.75;
+    }
+
+    .c-body p {
+      margin-bottom: 10px;
+    }
+
+    .c-body ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .c-body ul li {
+      padding: 4px 0 4px 16px;
+      position: relative;
+    }
+
+    .c-body ul li::before {
+      content: '◆';
+      position: absolute;
+      left: 0;
+      color: #b8a86a;
+      font-size: 8px;
+      top: 8px;
+    }
+
+    .c-body strong {
+      color: #e8e0c0;
+    }
+
+    .c-body em {
+      color: #b8d4ea;
+      font-style: normal;
+    }
+
+    /* ---- Rejilla dos columnas ---- */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .card {
+      background: rgba(0, 20, 50, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 4px;
+      padding: 14px 16px;
+      backdrop-filter: blur(2px);
+    }
+
+    .card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      color: #b8d4ea;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .card p,
+    .card li {
+      font-size: 13.5px;
+      color: rgba(255, 255, 255, 0.88);
+      line-height: 1.65;
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card li::before {
+      content: '◆ ';
+      color: #b8a86a;
+      font-size: 7px;
+    }
+
+    /* ---- Rejilla cuatro columnas (unidades) ---- */
+    .four-col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .unit-card {
+      background: rgba(0, 20, 50, 0.5);
+      border-top: 2px solid #b8a86a;
+      padding: 12px;
+      backdrop-filter: blur(2px);
+    }
+
+    .unit-card .num {
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      color: rgba(184, 168, 106, 0.25);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .unit-card h4 {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      color: #b8d4ea;
+      margin-bottom: 7px;
+      letter-spacing: 0.5px;
+      line-height: 1.4;
+    }
+
+    .unit-card p {
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.6;
+    }
+
+    /* ---- Línea de tiempo ---- */
+    .timeline {
+      display: flex;
+      margin-top: 14px;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      height: 1px;
+      background: rgba(184, 168, 106, 0.4);
+    }
+
+    .tl-item {
+      flex: 1;
+      text-align: center;
+    }
+
+    .tl-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid #b8a86a;
+      background: #0a2040;
+      margin: 14px auto 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .tl-label {
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: #b8d4ea;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .tl-desc {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.5;
+    }
+
+    /* ---- Barras de resultados ---- */
+    .result-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 7px 0;
+    }
+
+    .result-label {
+      font-size: 13.5px;
+      color: rgba(255, 255, 255, 0.9);
+      width: 250px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .bar-wrap {
+      flex: 1;
+      height: 7px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar {
+      height: 100%;
+      background: linear-gradient(to right, #6baed4, #b8d4ea);
+      border-radius: 4px;
+      transition: width 1.2s ease 0.4s;
+      width: 0%;
+    }
+
+    /* .slide.active .bar: animación activada por JS via data-width */
+    .result-val {
+      font-size: 13px;
+      color: #b8d4ea;
+      width: 50px;
+    }
+
+    /* ---- Pills ---- */
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+      padding: 4px 12px;
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.85);
+      letter-spacing: 0.5px;
+      background: rgba(0, 30, 60, 0.3);
+    }
+
+    /* ====== NAVIGATION BAR ====== */
+    #nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+      background: rgba(0, 10, 25, 0.97);
+      border-top: 1px solid rgba(184, 168, 106, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      z-index: 200;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid rgba(184, 168, 106, 0.45);
+      color: #D8D1A8;
+      font-family: 'Lato', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 6px 20px;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-transform: uppercase;
+    }
+
+    .nav-btn:hover {
+      background: rgba(184, 168, 106, 0.12);
+      border-color: #b8a86a;
+    }
+
+    #slide-counter {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: rgba(255, 255, 255, 0.4);
+      min-width: 70px;
+      text-align: center;
+    }
+
+    .dot-nav {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(184, 168, 106, 0.25);
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .dot.active {
+      background: #b8a86a;
+      transform: scale(1.5);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="slideshow">
+
+    <!-- ========== SLIDE 1: PORTADA (vacía) ========== -->
+    <div class="slide active" id="s1">
+      <!-- Portada vacía: solo imagen de fondo -->
+    </div>
+
+    <!-- ========== SLIDE 2: PORTADA TEXTO ========== -->
+    <div class="slide" id="s2">
+      <div class="slide-content"></div>
+      <div class="content-area no-photo">
+        <div class="text-panel" style="padding-right:50px; align-items:center; text-align:center;">
+          <div class="c-tag">Proyecto de Grado · I.E. Escuela Normal Superior de Popayán · 2025</div>
+          <h2 class="c-title" style="font-size:clamp(28px, 4vw, 52px); margin-bottom:12px;">Moti y Moti<br />en Aventura</h2>
+          <div class="c-divider" style="margin: 0 auto 20px;"></div>
+          <p class="c-body" style="font-size:clamp(14px, 1.6vw, 18px); margin-bottom:24px; color:rgba(255,255,255,0.88);">
+            Estrategias lúdicas, artísticas y psicomotoras para potenciar<br />la motricidad fina y gruesa en niños de prejardín
+          </p>
+          <div class="c-body" style="line-height:2.2;">
+            <div style="font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#b8d4ea; margin-bottom:8px;">Estudiantes en práctica</div>
+            Andres Hoyos &nbsp;·&nbsp; Juan Losada &nbsp;·&nbsp; Daniel Pancho &nbsp;·&nbsp; Sebastian Dulce<br />
+            Hogar Infantil Pequeñines de Popayán<br />
+            Grado Prejardín 3 · 27 niños · 3–4 años
+          </div>
+          <div style="margin-top:22px; font-size:11px; letter-spacing:3px; color:rgba(255,255,255,0.5);">Popayán, octubre 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 2: RESUMEN ========== -->
+    <div class="slide" id="s2">
+      <div class="slide-content"></div>
+      <div class="content-area">
+        <div class="text-panel">
+          <div class="c-tag">Síntesis del proyecto</div>
+          <h2 class="c-title">Resumen</h2>
+          <div class="c-divider"></div>
+          <div class="c-body">
+            <p>En el Hogar Infantil Pequeñines de Popayán se detectaron en 27 niños de 3–4 años retrasos en el
+              desarrollo psicomotor: persistencia del agarre palmar, dificultad para rasgar, ensartar, saltar y mantener
+              equilibrio. La causa: 2–3 horas diarias de pantallas y reducción del juego libre en favor de talleres
+              escritos.</p>
+            <p>Se diseñó e implementó <strong>"Moti y Moti en Aventura"</strong> — un programa de 8 semanas, 4 unidades
+              didácticas, con dos personajes mediadores: <em>Moti Grande</em> (motricidad gruesa) y <em>Moti
+                Pequeño</em> (motricidad fina), utilizando materiales reciclados del contexto caucano.</p>
+            <div class="pills">
+              <span class="pill">Motricidad Fina</span>
+              <span class="pill">Motricidad Gruesa</span>
+              <span class="pill">Psicomotricidad</span>
+              <span class="pill">Primera Infancia</span>
+              <span class="pill">Juego Libre</span>
+              <span class="pill">Estrategias Lúdicas</span>
+              <span class="pill">Desarrollo Integral</span>
+              <span class="pill">Prejardín</span>
+            </div>
+          </div>
+        </div>
+        <div class="photo-panel">
+          <img src="foto_aula_taller.jpeg" alt="Aula Taller de Juegos" style="height:100%; object-position:center;" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 3: PROBLEMA ========== -->
+    <div class="slide" id="s3">
+      <div class="slide-content"></div>
+      <div class="content-area">
+        <div class="text-panel">
+          <div class="c-tag">Planteamiento del problema</div>
+          <h2 class="c-title">¿Por qué intervenir?</h2>
+          <div class="c-divider"></div>
+          <div class="two-col" style="margin-top:6px;">
+            <div class="card">
+              <h3>🖐 Motricidad Fina</h3>
+              <ul class="c-body">
+                <li>12 de 27 niños con agarre palmar (esperado: trípode)</li>
+                <li>Solo 5 lograban ensartar cuentas de 2 cm sin ayuda</li>
+                <li>Al rasgar, usaban toda la mano con frustración</li>
+                <li>Al moldear, solo aplastaban — sin hacer bolitas</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>🏃 Motricidad Gruesa</h3>
+              <ul class="c-body">
+                <li>Solo 6 caminaban en línea recta sin salirse</li>
+                <li>7 niños evitaban saltar por miedo al desequilibrio</li>
+                <li>Equilibrio en un pie: máximo 4–5 segundos</li>
+                <li>Subían escaleras poniendo dos pies por peldaño</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>🏠 Causas Familiares</h3>
+              <ul class="c-body">
+                <li>2–3 horas diarias frente a pantallas</li>
+                <li>Vivienda en apartamentos sin zonas verdes</li>
+                <li>Poca estimulación motriz en el hogar</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>🏫 Causas Institucionales</h3>
+              <ul class="c-body">
+                <li>Juego en parque reducido a favor de talleres escritos</li>
+                <li>Escasa variedad de materiales psicomotores</li>
+                <li>Escolarización temprana que limita el movimiento</li>
+              </ul>
+            </div>
+          </div>
+          <div class="c-body"
+            style="margin-top:12px; text-align:center; color:rgba(255,255,255,0.7); font-size:11.5px; font-style:italic;">
+            ¿Cómo potenciar de manera lúdica, integral y contextualizada la motricidad fina y gruesa en el grado
+            prejardín 3 del Hogar Infantil Pequeñines de Popayán?
+          </div>
+        </div><!-- /text-panel -->
+        <div class="photo-panel" style="width:32%; flex-direction:column; gap:6px;">
+          <img src="foto_cancha_grande.jpeg" alt="Niños corriendo" class="tall" />
+          <img src="foto_ninos_corriendo.jpeg" alt="Niños en actividad" class="short" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 4: OBJETIVOS ========== -->
+    <div class="slide" id="s4">
+      <div class="slide-content"></div>
+      <div class="content-area">
+        <div class="text-panel">
+          <div class="c-tag">Propósitos del proyecto</div>
+          <h2 class="c-title">Objetivos</h2>
+          <div class="c-divider"></div>
+          <div class="card"
+            style="border-color: rgba(184,168,106,0.5); background: rgba(0,30,70,0.5); margin-bottom:12px;">
+            <h3 style="color:#e8e0c0; font-size:12px;">🎯 Objetivo General</h3>
+            <p class="c-body">Potenciar el desarrollo integral de la motricidad fina y gruesa en niños y niñas de
+              prejardín 3 del Hogar Infantil Pequeñines de Popayán, a través de estrategias lúdicas, artísticas y
+              psicomotoras mediadas por el juego libre y dirigido, que favorezcan la autonomía, seguridad corporal,
+              coordinación y el goce por el movimiento.</p>
+          </div>
+          <div class="two-col">
+            <div class="card">
+              <h3>Objetivo 1</h3>
+              <p class="c-body">Diagnosticar el nivel de desarrollo de la motricidad fina y gruesa mediante listas de
+                verificación de 20 indicadores, observación participante y diarios de campo.</p>
+            </div>
+            <div class="card">
+              <h3>Objetivo 2</h3>
+              <p class="c-body">Diseñar la propuesta "Moti y Moti en Aventura" en 4 unidades progresivas con circuitos,
+                juego libre, arte sensorial, música y material reciclable.</p>
+            </div>
+            <div class="card">
+              <h3>Objetivo 3</h3>
+              <p class="c-body">Implementar durante 8 semanas (3 sesiones de 45 min), documentando con diarios de campo,
+                fotos y adaptaciones según los ritmos individuales.</p>
+            </div>
+            <div class="card">
+              <h3>Objetivo 4</h3>
+              <p class="c-body">Evaluar avances y producir la cartilla <em>"Moti Moti – manual para jugar en casa y en
+                  el jardín"</em> como producto pedagógico replicable.</p>
+            </div>
+          </div>
+        </div><!-- /text-panel -->
+        <div class="photo-panel">
+          <img src="foto_clase_ninos.jpeg" alt="Clase con niños" style="height:100%; object-position:center;" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 5: MARCO TEÓRICO ========== -->
+    <div class="slide" id="s5">
+      <div class="slide-content"></div>
+      <div class="content-area no-photo">
+        <div class="text-panel" style="padding-right:50px;">
+          <div class="c-tag">Fundamentos teóricos</div>
+          <h2 class="c-title">Marco Teórico</h2>
+          <div class="c-divider"></div>
+          <div class="two-col">
+            <div class="card">
+              <h3>🏃 Psicomotricidad</h3>
+              <ul class="c-body">
+                <li><strong>Wallon (1942):</strong> El movimiento es la primera forma del pensamiento; la emoción se
+                  expresa en tono muscular</li>
+                <li><strong>Aucouturier:</strong> El aula psicomotriz como lugar de placer de hacer, ser y pensar</li>
+                <li><strong>Gallahue (1982):</strong> Fase de movimientos fundamentales (locomoción, estabilidad,
+                  manipulación)</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>🎮 Juego</h3>
+              <ul class="c-body">
+                <li><strong>Vygotsky:</strong> En el juego, el niño se comporta por encima de su edad promedio</li>
+                <li><strong>MEN Doc. 22 (2014):</strong> El juego es derecho, actividad rectora y lenguaje</li>
+                <li><strong>Huizinga (1938):</strong> El juego es acción libre, con tensión, alegría y un mundo aparte
+                </li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>🎨 Arte y Música</h3>
+              <ul class="c-body">
+                <li>Pintura dactilar → estimula la presión digital</li>
+                <li>Collage con semillas de café/maíz → estimula la pinza</li>
+                <li>Barro → fortalece la musculatura de la mano</li>
+                <li>Rondas y percusión → organizan ritmo y lateralidad</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>⚖️ Marco Legal</h3>
+              <ul class="c-body">
+                <li>Constitución Art. 44: derechos de los niños</li>
+                <li>Ley 115 de 1994: preescolar primer nivel formal</li>
+                <li>Ley 1804/2016 De Cero a Siempre</li>
+                <li>Bases Curriculares 2017: cuerpo, primer territorio</li>
+              </ul>
+            </div>
+          </div>
+        </div><!-- /text-panel -->
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 6: METODOLOGÍA ========== -->
+    <div class="slide" id="s6">
+      <div class="slide-content"></div>
+      <div class="content-area">
+        <div class="text-panel">
+          <div class="c-tag">Diseño de investigación</div>
+          <h2 class="c-title">Metodología</h2>
+          <div class="c-divider"></div>
+          <div class="c-body">
+            <p>Enfoque <strong>cualitativo</strong> · Investigación–acción pedagógica · 27 niños de 3–4 años · Hogar
+              Infantil Pequeñines, Popayán</p>
+          </div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-label">Fase 1</div>
+              <div class="tl-desc"><strong style="color:#e8e0c0">Diagnóstica</strong><br />2 semanas<br />Lista de
+                verificación<br />20 indicadores · 4 niveles</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-label">Fase 2</div>
+              <div class="tl-desc"><strong style="color:#e8e0c0">Diseño</strong><br />1 semana<br />Creación de
+                personajes<br />Planeaciones y materiales</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-label">Fase 3</div>
+              <div class="tl-desc"><strong style="color:#e8e0c0">Implementación</strong><br />8 semanas<br />Jueves
+                9:00–9:50 am<br />3 sesiones / semana</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-label">Fase 4</div>
+              <div class="tl-desc"><strong style="color:#e8e0c0">Evaluación</strong><br />1 semana<br />Análisis
+                comparativo<br />inicial–final</div>
+            </div>
+          </div>
+          <div class="two-col" style="margin-top:14px;">
+            <div class="card">
+              <h3>Técnicas e Instrumentos</h3>
+              <ul class="c-body">
+                <li>Lista de verificación (4 niveles de desempeño)</li>
+                <li>Diario de campo reflexivo</li>
+                <li>Fotografías y video con consentimiento</li>
+                <li>Asamblea con niños y entrevista al docente</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Materiales del Contexto</h3>
+              <ul class="c-body">
+                <li>Semillas de café y maíz de la galería caucana</li>
+                <li>Barro, cartón y llantas recicladas</li>
+                <li>Botellas convertidas en bolos</li>
+                <li>Material natural y de bajo costo</li>
+              </ul>
+            </div>
+          </div>
+        </div><!-- /text-panel -->
+        <div class="photo-panel" style="width:30%; flex-direction:column; gap:6px;">
+          <img src="foto_sesion_movimiento.jpeg" alt="Sesión movimiento" class="tall" />
+          <img src="foto_aula_vacia.jpeg" alt="Aula taller" class="short" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 7: LA PROPUESTA ========== -->
+    <div class="slide" id="s7">
+      <div class="slide-content"></div>
+      <div class="content-area">
+        <div class="text-panel">
+          <div class="c-tag">Propuesta pedagógica</div>
+          <h2 class="c-title">Moti Grande & Moti Pequeño</h2>
+          <div class="c-divider"></div>
+          <div class="two-col" style="margin-bottom:14px;">
+            <div class="card" style="border-color: rgba(184,168,106,0.5);">
+              <h3 style="font-size:13px; color:#e8e0c0;">🏋️ Moti Grande</h3>
+              <p class="c-body">Bonachón, le encanta <strong>saltar, trepar y rodar</strong>. Es el guía de la
+                motricidad gruesa: trabaja fuerza, equilibrio, coordinación bilateral y esquema corporal.</p>
+            </div>
+            <div class="card" style="border-color: rgba(184,168,106,0.5);">
+              <h3 style="font-size:13px; color:#e8e0c0;">✂️ Moti Pequeño</h3>
+              <p class="c-body">Curioso, le gusta <strong>hacer collares, amasar y recortar</strong>. Es el guía de la
+                motricidad fina: trabaja la pinza, precisión y coordinación ojo-mano.</p>
+            </div>
+          </div>
+          <div class="card" style="background: rgba(0,30,70,0.55);">
+            <h3>Estructura de cada sesión (45 min)</h3>
+            <div class="c-body"
+              style="display:flex; gap:20px; margin-top:4px; justify-content:space-around; text-align:center;">
+              <div>
+                <div style="font-size:20px;">👋</div>
+                <div style="font-size:11px; color:#b8d4ea; margin-top:4px;">Saludo de Moti<br />&amp; activación</div>
+              </div>
+              <div style="color:rgba(255,255,255,0.3)">→</div>
+              <div>
+                <div style="font-size:20px;">🎯</div>
+                <div style="font-size:11px; color:#b8d4ea; margin-top:4px;">Actividad<br />central</div>
+              </div>
+              <div style="color:rgba(255,255,255,0.3)">→</div>
+              <div>
+                <div style="font-size:20px;">💬</div>
+                <div style="font-size:11px; color:#b8d4ea; margin-top:4px;">Espacio de<br />reflexión</div>
+              </div>
+              <div style="color:rgba(255,255,255,0.3)">→</div>
+              <div>
+                <div style="font-size:20px;">📸</div>
+                <div style="font-size:11px; color:#b8d4ea; margin-top:4px;">Registro<br />docente</div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /text-panel -->
+        <div class="photo-panel" style="width:30%; flex-direction:column; gap:6px;">
+          <img src="foto_practicantes_ninos.jpeg" alt="Practicantes con niños" class="tall" />
+          <img src="foto_mesas_moti.jpeg" alt="Mesas Moti" class="short" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 8: UNIDADES DIDÁCTICAS ========== -->
+    <div class="slide" id="s8">
+      <div class="slide-content"></div>
+      <div class="content-area">
+        <div class="text-panel">
+          <div class="c-tag">Estructura curricular</div>
+          <h2 class="c-title">Cuatro Unidades Didácticas</h2>
+          <div class="c-divider"></div>
+          <div class="four-col">
+            <div class="unit-card">
+              <div class="num">01</div>
+              <h4>Descubro mi cuerpo, mi primera casa</h4>
+              <p><strong style="color:#b8d4ea">Sem 1–2</strong><br />Esquema corporal, equilibrio dinámico.<br /><br />
+                <em style="color:rgba(255,255,255,0.65)">Fin.:</em> Ratoncito sin color (rellenar con dedos), caminito
+                en zigzag, rondas infantiles. Material: papelillo, altavoz.
+              </p>
+            </div>
+            <div class="unit-card">
+              <div class="num">02</div>
+              <h4>Mis manitas mágicas y poderosas</h4>
+              <p><strong style="color:#b8d4ea">Sem 3–4</strong><br />Musculatura de la mano, agarre trípode.<br /><br />
+                <em style="color:rgba(255,255,255,0.65)">Fin.:</em> Lluvia mágica (rasgado), pintura de cocodrilo,
+                trasvasado de maíz/café con cuchara y pinza.
+              </p>
+            </div>
+            <div class="unit-card">
+              <div class="num">03</div>
+              <h4>Mi cuerpo en movimiento: salto, ruedo y equilibrio</h4>
+              <p><strong style="color:#b8d4ea">Sem 5–6</strong><br />Coordinación bilateral, lateralidad.<br /><br />
+                <em style="color:rgba(255,255,255,0.65)">Fin.:</em> Circuito llantas/colchonetas, Simón dice, laberintos
+                con marcador, tuercas y tornillos.
+              </p>
+            </div>
+            <div class="unit-card">
+              <div class="num">04</div>
+              <h4>Creo, juego y aprendo con todo mi cuerpo</h4>
+              <p><strong style="color:#b8d4ea">Sem 7–8</strong><br />Integración motora, autonomía.<br /><br />
+                <em style="color:rgba(255,255,255,0.65)">Fin.:</em> Obra de teatro "Viaje de Moti Moti", circuito
+                padres-hijos, medalla "Yo puedo".
+              </p>
+            </div>
+          </div>
+        </div><!-- /text-panel -->
+        <div class="photo-panel" style="width:30%; flex-direction:column; gap:6px;">
+          <img src="foto_pintura_cocodrilo.jpeg" alt="Pintura cocodrilo" class="tall" />
+          <img src="foto_rasgado.jpeg" alt="Rasgado motricidad fina" class="short" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 9: RESULTADOS ========== -->
+    <div class="slide" id="s9">
+      <div class="slide-content"></div>
+      <div class="content-area">
+        <div class="text-panel">
+          <div class="c-tag">Logros alcanzados</div>
+          <h2 class="c-title">Resultados</h2>
+          <div class="c-divider"></div>
+          <p class="c-body" style="margin-bottom:18px;">Avances documentados al finalizar las 8 semanas de la propuesta
+            "Moti y Moti en Aventura"</p>
+          <div style="max-width:680px;">
+            <div class="result-row">
+              <div class="result-label">Abandono del agarre palmar (→ trípode)</div>
+              <div class="bar-wrap">
+                <div class="bar" data-width="100"></div>
+              </div>
+              <div class="result-val">100%</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">Equilibrio en un pie (4–5 seg → 10 seg)</div>
+              <div class="bar-wrap">
+                <div class="bar" data-width="90"></div>
+              </div>
+              <div class="result-val">+100%</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">Rasgado índice-pulgar mejorado</div>
+              <div class="bar-wrap">
+                <div class="bar" data-width="92"></div>
+              </div>
+              <div class="result-val">92%</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">Autonomía (lonchera, abrigo, aseo)</div>
+              <div class="bar-wrap">
+                <div class="bar" data-width="85"></div>
+              </div>
+              <div class="result-val">85%</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">Mayor seguridad y cooperación grupal</div>
+              <div class="bar-wrap">
+                <div class="bar" data-width="88"></div>
+              </div>
+              <div class="result-val">Alto</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">Energía y disfrute del movimiento</div>
+              <div class="bar-wrap">
+                <div class="bar" data-width="95"></div>
+              </div>
+              <div class="result-val">Muy alto</div>
+            </div>
+          </div>
+          <p class="c-body" style="margin-top:14px; font-size:11px; color:rgba(255,255,255,0.5); font-style:italic;">
+            El aspecto socioafectivo también mejoró notablemente: mayor tolerancia a la frustración, confianza con
+            compañeros y docentes, y autonomía cotidiana.
+          </p>
+        </div><!-- /text-panel -->
+        <div class="photo-panel" style="width:30%; flex-direction:column; gap:6px;">
+          <img src="foto_grupo.jpeg" alt="Grupo completo" class="tall" />
+          <img src="foto_sesion_suelo.jpeg" alt="Sesión actividad" class="short" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SLIDE 10: CONCLUSIONES ========== -->
+    <div class="slide" id="s10">
+      <div class="slide-content"></div>
+      <div class="content-area">
+        <div class="text-panel">
+          <div class="c-tag">Cierre del proyecto</div>
+          <h2 class="c-title">Conclusiones & Recomendaciones</h2>
+          <div class="c-divider"></div>
+          <div class="two-col">
+            <div class="card">
+              <h3>📋 Conclusiones</h3>
+              <ul class="c-body">
+                <li>El movimiento es el primer organizador del cerebro: privarlo afecta la escritura, la autonomía y la
+                  autoestima</li>
+                <li>Las estrategias lúdicas, artísticas y psicomotoras mejoran integralmente el desarrollo infantil</li>
+                <li>El contexto caucano ofrece recursos naturales valiosos y de bajo costo para la psicomotricidad</li>
+                <li>El jardín infantil es un espacio clave cuando el hogar no ofrece zonas de movimiento</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>💡 Recomendaciones</h3>
+              <ul class="c-body">
+                <li>Ampliar el tiempo y habilitar un espacio dedicado a la psicomotricidad y el juego libre</li>
+                <li>Evitar talleres escritos y planas en niños de 3–4 años de prejardín</li>
+                <li>Usar materiales reciclados y naturales: cartón, botellas, semillas, barro, llantas</li>
+                <li>Replicar la cartilla <em>"Moti Moti – manual para jugar en casa y en el jardín"</em></li>
+              </ul>
+            </div>
+          </div>
+          <div class="card"
+            style="margin-top:14px; text-align:center; background: rgba(0,30,70,0.55); border-color:rgba(184,168,106,0.4);">
+            <p class="c-body" style="font-style:italic; color:rgba(255,255,255,0.8); font-size:13px; line-height:1.7;">
+              "Si analizamos el panorama de Popayán, el jardín es uno de los espacios más importantes para que el niño
+              corra, ruede, grite, juegue y aprenda. Lograr un espacio así crea en el niño la idea: <strong>yo puedo, yo
+                soy capaz</strong> — base de la autoestima, la tolerancia a la frustración y la cooperación."
+            </p>
+            <p style="font-size:10px; letter-spacing:2px; color:rgba(184,168,106,0.7); margin-top:10px;">— Propuesta
+              Moti y Moti en Aventura · ENSP Popayán · 2025</p>
+          </div>
+        </div><!-- /text-panel -->
+        <div class="photo-panel" style="width:30%; flex-direction:column; gap:6px;">
+          <img src="foto_abrazo2.jpeg" alt="Abrazo niños" class="tall" />
+          <img src="foto_abrazo.jpeg" alt="Niños abrazando" class="short" />
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /#slideshow -->
+
+  <!-- ====== NAVIGATION BAR ====== -->
+  <div id="nav-bar">
+    <button class="nav-btn" onclick="changeSlide(-1)">&#8592; Anterior</button>
+    <div class="dot-nav" id="dots"></div>
+    <span id="slide-counter">1 / 11</span>
+    <button class="nav-btn" onclick="changeSlide(1)">Siguiente &#8594;</button>
+    <button class="nav-btn fullscreen-btn" id="fs-btn" onclick="toggleFullscreen()" title="Pantalla completa (F)">&#x26F6; Pantalla completa</button>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('slide-counter');
+    const dotsContainer = document.getElementById('dots');
+    let current = 0;
+
+    // Build dots
+    slides.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      d.onclick = () => goTo(i);
+      dotsContainer.appendChild(d);
+    });
+
+    function animateBars(slide) {
+      slide.querySelectorAll('.bar').forEach(bar => {
+        const w = bar.getAttribute('data-width');
+        if (w) setTimeout(() => { bar.style.width = w + '%'; }, 100);
+      });
+    }
+
+    function goTo(n) {
+      slides[current].classList.remove('active');
+      dotsContainer.children[current].classList.remove('active');
+      // Reset bars on leaving
+      slides[current].querySelectorAll('.bar').forEach(b => b.style.width = '0%');
+      current = (n + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dotsContainer.children[current].classList.add('active');
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      animateBars(slides[current]);
+    }
+
+    function changeSlide(dir) { goTo(current + dir); }
+
+    // ====== PANTALLA COMPLETA ======
+    const fsBtn = document.getElementById('fs-btn');
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement) {
+        fsBtn.innerHTML = '&#x2715; Salir pantalla completa';
+        fsBtn.style.borderColor = 'rgba(184,168,106,0.8)';
+        fsBtn.style.color = '#b8a86a';
+      } else {
+        fsBtn.innerHTML = '&#x26F6; Pantalla completa';
+        fsBtn.style.borderColor = '';
+        fsBtn.style.color = '';
+      }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+      if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')  changeSlide(-1);
+      if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+    });
+
+    // Animate bars on first slide if applicable
+    animateBars(slides[0]);
+  </script>
+</body>
+
+</html>
