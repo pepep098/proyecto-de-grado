@@ -1,0 +1,70 @@
+# ============================================================
+# .gitignore – Proyecto Moti y Moti en Aventura
+# ============================================================
+
+# ------------------------------------------------------------
+# Documentos de origen (archivos grandes de trabajo, no del repo)
+# ------------------------------------------------------------
+PROYECTO DE GRADO JJ.docx
+EBNSP-90 A-BLACK.pptx
+EBNSP-90 A-WHITE.pptx
+*.docx
+*.pptx
+
+# ------------------------------------------------------------
+# Carpetas de recursos intermedios extraídos automáticamente
+# ------------------------------------------------------------
+docx_images/
+pptx_media/
+
+# ------------------------------------------------------------
+# Scripts temporales de modificación (solo uso interno)
+# ------------------------------------------------------------
+modify_pptx.ps1
+modify_pptx.py
+_pptx_temp/
+
+# ------------------------------------------------------------
+# Archivos de fondo no usados en la presentación final
+# ------------------------------------------------------------
+bg_texture.jpeg
+children_bg.png
+
+# ------------------------------------------------------------
+# Archivos temporales de Office (lock files)
+# ------------------------------------------------------------
+~$*
+
+# ------------------------------------------------------------
+# Sistema operativo Windows
+# ------------------------------------------------------------
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ------------------------------------------------------------
+# macOS (por si se abre en Mac)
+# ------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ------------------------------------------------------------
+# Editores de código
+# ------------------------------------------------------------
+.vscode/
+.idea/
+*.suo
+*.user
+*.swp
+*.swo
+*~
+
+# ------------------------------------------------------------
+# Node / npm (por si se añade algún tooling después)
+# ------------------------------------------------------------
+node_modules/
+dist/
+.env
+.env.local
